@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Build Smart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --bg: #121212;
+      --accent: #00e676;
+      --font-header: 'Orbitron', sans-serif;
+      --font-body: 'Roboto', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      font-family: var(--font-body);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(to right, #1a1a1a, #2c2c2c);
+      padding: 3rem 1rem 2rem;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      animation: fadeInDown 1s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header img {
+      max-width: 100px;
+      height: auto;
+      filter: drop-shadow(0 0 10px var(--primary));
+      border-radius: 15px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2.4rem;
+      margin: 0;
+      font-family: var(--font-header);
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .description {
+      font-size: 1rem;
+      color: #ccc;
+      margin-top: 1rem;
+    }
+
+    .download-btn, .nav-btn {
+      margin-top: 2rem;
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: var(--accent);
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+
+    .download-btn:hover,
+    .nav-btn:hover {
+      background-color: #00c853;
+    }
+
+    .download-counter, .visit-counter {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 1rem;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    footer {
+      background: #1a1a1a;
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img id="header-logo" src="MainLogo.jpg" alt="Logo" />
+    <h1 id="page-title">Build Smart</h1>
+  </header>
+
+  <main>
+    <!-- الصفحة الرئيسية -->
+    <div id="home" class="page active">
+      <p class="description">
+        Welcome to Build Smart, your hub for smart and efficient tools.
+      </p>
+      <button class="nav-btn" onclick="showPage('filemanager')">View FileManager Page</button>
+      <div class="visit-counter" id="visit-count">Visits: ...</div>
+    </div>
+
+    <!-- صفحة FileManager -->
+    <div id="filemanager" class="page">
+      <p class="description">
+        FileManager is your smart solution for organizing files efficiently with powerful features.
+      </p>
+
+      <a
+        class="download-btn"
+        href="https://www.mediafire.com/file/pdnl7o00brpi2z6/FileManager_Setup.exe/file"
+        target="_blank"
+      >Download FileManager</a>
+
+      <p class="download-counter" id="download-count">Downloads: ...</p>
+      <button class="nav-btn" onclick="showPage('home')">← Back to Home</button>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Build Smart. All rights reserved.
+  </footer>
+
+  <script>
+    // زيارات الصفحة الرئيسية
+    fetch('https://api.countapi.xyz/hit/buildsmart-home/visits')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('visit-count').textContent = `Visits: ${data.value}`;
+      });
+
+    // تحميلات FileManager
+    fetch('https://api.countapi.xyz/hit/buildsmart-filemanager/downloads')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('download-count').textContent = `Downloads: ${data.value}`;
+      });
+
+    // التنقل بين الصفحات
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(div => div.classList.remove('active'));
+      document.getElementById(page).classList.add('active');
+
+      const title = document.getElementById('page-title');
+      const logo = document.getElementById('header-logo');
+
+      if (page === 'filemanager') {
+        title.textContent = 'FileManager';
+        logo.src = 'FileManager.png';
+      } else {
+        title.textContent = 'Build Smart';
+        logo.src = 'MainLogo.jpg';
+      }
+    }
+  </script>
+</body>
+</html>
